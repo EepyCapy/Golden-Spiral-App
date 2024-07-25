@@ -39,9 +39,9 @@ class QuarterCircle:
 		self.y = y               # y-coordinate of the center of the Quarter Circle
 		self.radius = radius     # Radius of the Quarter Circle
 		self.quadrant = quadrant # Quadrant in which the Quarter Circle would be 
-					 # if it were centered at the Origin of the Coordinate System
+					 			 # if it were centered at the Origin of the Coordinate System
 
-	def drawQuarterCircle(self, axes):
+	def drawQuarterCircle(self, axes, clr):
 		# Circle centered at Origin
 		xCoords = np.linspace(0, self.radius, 60)
 		yCoords = np.sqrt(self.radius ** 2 - xCoords ** 2)
@@ -50,17 +50,17 @@ class QuarterCircle:
 		yTranslation = self.y * np.ones(len(yCoords))
 		# Plotting
 		if self.quadrant == 1:
-			axes.plot(xCoords + xTranslation, yCoords + yTranslation)
+			axes.plot(xCoords + xTranslation, yCoords + yTranslation, color=clr)
 		if self.quadrant == 2:
-			axes.plot(-np.flip(xCoords) + xTranslation, np.flip(yCoords) + yTranslation)
+			axes.plot(-np.flip(xCoords) + xTranslation, np.flip(yCoords) + yTranslation, color=clr)
 		if self.quadrant == 3:
-			axes.plot(-np.flip(xCoords) + xTranslation, -np.flip(yCoords) + yTranslation)
+			axes.plot(-np.flip(xCoords) + xTranslation, -np.flip(yCoords) + yTranslation, color=clr)
 		if self.quadrant == 4:
-			axes.plot(xCoords + xTranslation, -yCoords + yTranslation)
+			axes.plot(xCoords + xTranslation, -yCoords + yTranslation, color=clr)
 
 # Class that represents the Golden/Fibonacci Spiral and Fibonacci Squares
 class FibonacciSpiral:
-	def __init__(self, n, boolVal):
+	def __init__(self, n, boolSquare, boolCircle, colour):
 		# Defining attributes
 		self.n = n
 		self.fibList = [fibonacci(i) for i in range(n + 1)]
@@ -68,7 +68,11 @@ class FibonacciSpiral:
 		self.figure = plt.figure(figsize=(10, 6.1803), facecolor='#121212')
 		self.axes = self.figure.add_subplot()
 		self.axes.tick_params(left=False, bottom=False, labelleft=False, labelbottom=False)
-		self.showSquares = boolVal
+		self.axes.axis('equal')
+
+		self.colour = colour
+		self.showSquares = boolSquare
+		self.showCircles = boolCircle
 
 	def calculateSquareCorners(self):
 		l = len(self.fibList)
@@ -136,5 +140,6 @@ class FibonacciSpiral:
 		if self.showSquares:
 			for square in squareList:
 				square.drawSquare(self.axes)
-		for quarterCircle in quarterCircleList:
-			quarterCircle.drawQuarterCircle(self.axes)
+		if self.showCircles:
+			for quarterCircle in quarterCircleList:
+				quarterCircle.drawQuarterCircle(self.axes, self.colour)
