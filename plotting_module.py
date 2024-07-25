@@ -60,10 +60,15 @@ class QuarterCircle:
 
 # Class that represents the Golden/Fibonacci Spiral and Fibonacci Squares
 class FibonacciSpiral:
-	def __init__(self, n):
+	def __init__(self, n, boolVal):
+		# Defining attributes
 		self.n = n
 		self.fibList = [fibonacci(i) for i in range(n + 1)]
-		self.showSquares = True
+		# Plotting attributes
+		self.figure = plt.figure(figsize=(10, 6.1803), facecolor='#121212')
+		self.axes = self.figure.add_subplot()
+		self.axes.tick_params(left=False, bottom=False, labelleft=False, labelbottom=False)
+		self.showSquares = boolVal
 
 	def calculateSquareCorners(self):
 		l = len(self.fibList)
@@ -107,7 +112,6 @@ class FibonacciSpiral:
 			circleCounter += 1
 			centers.append([xCoord, yCoord])
 		centers.reverse()
-		print(centers)
 		return centers
 
 	def getSquares(self):
@@ -126,17 +130,11 @@ class FibonacciSpiral:
 			quadrantNum += 1
 		return quarterCircleList
 
-	def drawFibonacciSpiral(self, axes):
+	def drawFibonacciSpiral(self):
 		squareList = self.getSquares()
 		quarterCircleList = self.getQuarterCirlces()
-		for square in squareList:
-			square.drawSquare(axes)
+		if self.showSquares:
+			for square in squareList:
+				square.drawSquare(self.axes)
 		for quarterCircle in quarterCircleList:
-			quarterCircle.drawQuarterCircle(axes)
-
-#spiral = FibonacciSpiral(10)
-#fig, ax = plt.subplots()
-#spiral.drawFibonacciSpiral(ax)
-#ax.axis('equal')
-# ax.set_facecolor('black')
-#plt.show()
+			quarterCircle.drawQuarterCircle(self.axes)
